@@ -34,4 +34,16 @@ async def get_model(model_name: ModelName):
 
     return {"model_name": model_name, "message": "Have some residuals"}
 
+@app.get("/files/{file_path:path}")
+async def read_file(file_path: str):
+    return open(file_path, "r").read()
 
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.requests import Request
+
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/home", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
